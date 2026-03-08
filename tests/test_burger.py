@@ -1,38 +1,6 @@
 import pytest
-from unittest.mock import Mock
 
 from praktikum.burger import Burger
-
-
-@pytest.fixture
-def burger():
-    return Burger()
-
-
-@pytest.fixture
-def bun():
-    bun = Mock()
-    bun.get_name.return_value = "black bun"
-    bun.get_price.return_value = 100
-    return bun
-
-
-@pytest.fixture
-def ingredient_sauce():
-    ing = Mock()
-    ing.get_type.return_value = "SAUCE"
-    ing.get_name.return_value = "hot sauce"
-    ing.get_price.return_value = 50
-    return ing
-
-
-@pytest.fixture
-def ingredient_filling():
-    ing = Mock()
-    ing.get_type.return_value = "FILLING"
-    ing.get_name.return_value = "cutlet"
-    ing.get_price.return_value = 200
-    return ing
 
 
 def test_set_buns_sets_bun(burger, bun):
@@ -72,7 +40,7 @@ def test_get_price_counts_bun_twice_and_ingredients(burger, bun, ingredient_sauc
     burger.add_ingredient(ingredient_filling)
 
     assert burger.get_price() == 100 * 2 + 50 + 200
-    bun.get_price.assert_called()  
+    bun.get_price.assert_called()
     ingredient_sauce.get_price.assert_called()
     ingredient_filling.get_price.assert_called()
 
@@ -90,9 +58,7 @@ def test_get_receipt_format_and_content(burger, bun, ingredient_sauce, ingredien
     receipt = burger.get_receipt()
 
     assert f"(==== {bun.get_name()} ====)" in receipt
-    assert f"(==== {bun.get_name()} ====)\n" in receipt  
-
+    assert f"(==== {bun.get_name()} ====)\n" in receipt
     assert f"= sauce {ingredient_sauce.get_name()} =" in receipt
     assert f"= filling {ingredient_filling.get_name()} =" in receipt
-
     assert f"Price: {burger.get_price()}" in receipt
